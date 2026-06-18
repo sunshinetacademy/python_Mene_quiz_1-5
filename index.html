@@ -1,0 +1,994 @@
+cat > /mnt/user-data/outputs/python_quiz_exam.html << 'HTMLEOF'
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🐍 اختبار Python — Sunshine T Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+/* ════════════════════════════════
+   VARIABLES
+════════════════════════════════ */
+:root {
+  --bg:        #0e1117;
+  --surface:   #161b27;
+  --card:      #1e2535;
+  --border:    #2a3349;
+  --gold:      #f7c948;
+  --gold2:     #ffaa00;
+  --green:     #3dd68c;
+  --red:       #ff5c6b;
+  --blue:      #5b9cf6;
+  --purple:    #a78bfa;
+  --text:      #e8edf5;
+  --muted:     #7c8aa0;
+  --radius:    14px;
+  --mono:      'JetBrains Mono', monospace;
+  --arabic:    'Cairo', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--arabic);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ════════════════════════════════
+   ANIMATED BACKGROUND
+════════════════════════════════ */
+.bg-grid {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(247,201,72,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(247,201,72,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+.bg-glow {
+  position: fixed; top: -200px; right: -200px;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(247,201,72,0.06) 0%, transparent 70%);
+  pointer-events: none; z-index: 0;
+  animation: drift 8s ease-in-out infinite alternate;
+}
+.bg-glow2 {
+  position: fixed; bottom: -150px; left: -150px;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(91,156,246,0.06) 0%, transparent 70%);
+  pointer-events: none; z-index: 0;
+  animation: drift 10s ease-in-out infinite alternate-reverse;
+}
+@keyframes drift { from { transform: translate(0,0); } to { transform: translate(30px, 20px); } }
+
+/* ════════════════════════════════
+   WRAPPER
+════════════════════════════════ */
+.wrapper {
+  position: relative; z-index: 1;
+  max-width: 820px; margin: 0 auto;
+  padding: 24px 20px 60px;
+}
+
+/* ════════════════════════════════
+   HEADER
+════════════════════════════════ */
+.exam-header {
+  text-align: center;
+  padding: 40px 24px 32px;
+  margin-bottom: 32px;
+}
+.academy-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(247,201,72,0.08);
+  border: 1px solid rgba(247,201,72,0.2);
+  border-radius: 100px;
+  padding: 6px 18px;
+  font-size: 0.78rem; font-weight: 700;
+  color: var(--gold); letter-spacing: 1px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+.exam-title {
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  font-weight: 900;
+  line-height: 1.2;
+  margin-bottom: 10px;
+}
+.exam-title .py { color: var(--gold); }
+.exam-subtitle {
+  color: var(--muted);
+  font-size: 1rem;
+  margin-bottom: 28px;
+}
+.exam-meta {
+  display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;
+}
+.meta-chip {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 16px;
+  font-size: 0.85rem; font-weight: 600;
+  color: var(--muted);
+}
+.meta-chip span { color: var(--text); }
+
+/* ════════════════════════════════
+   STUDENT INFO
+════════════════════════════════ */
+.student-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px 32px;
+  margin-bottom: 32px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.student-card h3 {
+  grid-column: 1 / -1;
+  font-size: 0.75rem; font-weight: 700;
+  color: var(--gold); letter-spacing: 2px;
+  text-transform: uppercase; margin-bottom: 4px;
+  display: flex; align-items: center; gap: 8px;
+}
+.student-card h3::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(90deg, var(--border), transparent);
+}
+.field-group { display: flex; flex-direction: column; gap: 6px; }
+.field-group label {
+  font-size: 0.82rem; font-weight: 600; color: var(--muted);
+}
+.field-group input, .field-group select {
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 11px 14px;
+  color: var(--text);
+  font-family: var(--arabic);
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s;
+  width: 100%;
+}
+.field-group input:focus, .field-group select:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(247,201,72,0.08);
+}
+.field-group select option { background: var(--card); }
+
+/* ════════════════════════════════
+   PROGRESS BAR
+════════════════════════════════ */
+.progress-section {
+  margin-bottom: 28px;
+}
+.progress-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 10px; font-size: 0.85rem; font-weight: 600;
+}
+.progress-label { color: var(--muted); }
+.progress-count { color: var(--gold); font-family: var(--mono); font-size: 0.9rem; }
+.progress-track {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 100px; height: 8px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--gold2));
+  border-radius: 100px;
+  transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+  width: 0%;
+}
+
+/* ════════════════════════════════
+   QUESTION CARD
+════════════════════════════════ */
+.question-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 32px;
+  margin-bottom: 20px;
+  animation: slideIn 0.4s cubic-bezier(0.4,0,0.2,1);
+  position: relative;
+  overflow: hidden;
+}
+.question-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--gold), var(--gold2));
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.q-meta {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
+}
+.q-num {
+  background: linear-gradient(135deg, var(--gold), var(--gold2));
+  color: #0e1117;
+  font-weight: 900; font-size: 0.8rem;
+  padding: 5px 14px; border-radius: 100px;
+  font-family: var(--mono);
+}
+.q-topic {
+  font-size: 0.75rem; font-weight: 700;
+  color: var(--muted); letter-spacing: 1px;
+  text-transform: uppercase;
+  border: 1px solid var(--border);
+  padding: 4px 12px; border-radius: 100px;
+}
+.q-diff {
+  font-size: 0.72rem; padding: 4px 10px;
+  border-radius: 100px; font-weight: 700; margin-right: auto;
+}
+.diff-easy   { background: rgba(61,214,140,0.12); color: var(--green); border: 1px solid rgba(61,214,140,0.2); }
+.diff-medium { background: rgba(247,201,72,0.12); color: var(--gold); border: 1px solid rgba(247,201,72,0.2); }
+.diff-hard   { background: rgba(255,92,107,0.12); color: var(--red); border: 1px solid rgba(255,92,107,0.2); }
+
+.q-text {
+  font-size: 1.15rem; font-weight: 700;
+  line-height: 1.6; margin-bottom: 24px;
+  color: var(--text);
+}
+
+/* code inside question */
+.code-inline {
+  display: inline-block;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(247,201,72,0.2);
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-family: var(--mono);
+  font-size: 0.92rem;
+  color: var(--gold);
+  direction: ltr; text-align: left;
+  margin: 8px 0; width: 100%;
+  white-space: pre;
+  overflow-x: auto;
+}
+
+/* ════════════════════════════════
+   OPTIONS
+════════════════════════════════ */
+.options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.options-grid.single-col { grid-template-columns: 1fr; max-width: 380px; }
+
+.option-btn {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 18px;
+  color: var(--text);
+  font-family: var(--arabic);
+  font-size: 0.95rem; font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  display: flex; align-items: center; gap: 12px;
+  text-align: right;
+  position: relative;
+  overflow: hidden;
+}
+.option-btn::before {
+  content: ''; position: absolute;
+  inset: 0; opacity: 0;
+  background: linear-gradient(135deg, rgba(247,201,72,0.06), transparent);
+  transition: opacity 0.18s;
+}
+.option-btn:hover:not(.locked) {
+  border-color: var(--gold);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+.option-btn:hover:not(.locked)::before { opacity: 1; }
+
+.opt-label {
+  width: 30px; height: 30px; border-radius: 8px;
+  background: var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.8rem; font-weight: 800; flex-shrink: 0;
+  font-family: var(--mono);
+  transition: all 0.18s;
+}
+.option-btn:hover:not(.locked) .opt-label {
+  background: var(--gold); color: #0e1117;
+}
+
+/* option states */
+.option-btn.correct {
+  border-color: var(--green) !important;
+  background: rgba(61,214,140,0.08) !important;
+  transform: none !important;
+}
+.option-btn.correct .opt-label { background: var(--green) !important; color: #0e1117 !important; }
+.option-btn.wrong {
+  border-color: var(--red) !important;
+  background: rgba(255,92,107,0.08) !important;
+  transform: none !important;
+}
+.option-btn.wrong .opt-label { background: var(--red) !important; color: #fff !important; }
+.option-btn.locked { cursor: default; opacity: 0.55; }
+.option-btn.locked:not(.correct):not(.wrong) { opacity: 0.35; }
+
+/* ════════════════════════════════
+   FEEDBACK TOAST
+════════════════════════════════ */
+.feedback-toast {
+  position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(80px);
+  z-index: 1000;
+  padding: 14px 28px; border-radius: 100px;
+  font-weight: 700; font-size: 1rem;
+  display: flex; align-items: center; gap: 10px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), opacity 0.35s;
+  opacity: 0; pointer-events: none;
+}
+.feedback-toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+.feedback-toast.ok  { background: var(--green); color: #0e1117; }
+.feedback-toast.bad { background: var(--red);   color: #fff; }
+
+/* ════════════════════════════════
+   NAVIGATION BUTTONS
+════════════════════════════════ */
+.nav-row {
+  display: flex; justify-content: space-between;
+  align-items: center; gap: 16px;
+  margin-top: 20px;
+}
+.btn {
+  padding: 12px 28px; border-radius: 100px;
+  font-family: var(--arabic); font-size: 0.95rem; font-weight: 700;
+  cursor: pointer; border: none; transition: all 0.2s;
+  display: flex; align-items: center; gap: 8px;
+}
+.btn-gold {
+  background: linear-gradient(135deg, var(--gold), var(--gold2));
+  color: #0e1117;
+  box-shadow: 0 4px 16px rgba(247,201,72,0.3);
+}
+.btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(247,201,72,0.4); }
+.btn-outline {
+  background: transparent;
+  border: 1.5px solid var(--border);
+  color: var(--muted);
+}
+.btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+.btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none !important; }
+
+.q-counter {
+  font-family: var(--mono); font-size: 0.85rem; color: var(--muted); font-weight: 600;
+}
+
+/* ════════════════════════════════
+   RESULTS SCREEN
+════════════════════════════════ */
+.results-screen { display: none; animation: slideIn 0.5s ease; }
+.results-screen.show { display: block; }
+
+.score-hero {
+  text-align: center;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 48px 32px;
+  margin-bottom: 28px;
+  position: relative; overflow: hidden;
+}
+.score-hero::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  background: linear-gradient(90deg, var(--gold), var(--gold2), var(--green));
+}
+.score-emoji { font-size: 4rem; margin-bottom: 8px; }
+.score-num {
+  font-family: var(--mono);
+  font-size: clamp(3rem, 10vw, 5rem);
+  font-weight: 700; line-height: 1;
+  color: var(--gold); margin-bottom: 8px;
+}
+.score-label { font-size: 1.1rem; color: var(--muted); margin-bottom: 24px; }
+.grade-badge {
+  display: inline-block;
+  padding: 10px 28px; border-radius: 100px;
+  font-size: 1rem; font-weight: 800;
+  margin-bottom: 20px;
+}
+.stars-row { font-size: 1.8rem; letter-spacing: 4px; margin-bottom: 16px; }
+.score-detail {
+  display: flex; justify-content: center; gap: 32px; flex-wrap: wrap;
+  font-size: 0.9rem; color: var(--muted);
+}
+.score-detail span { font-weight: 700; }
+.score-detail .ok { color: var(--green); }
+.score-detail .bad { color: var(--red); }
+
+/* Review section */
+.review-title {
+  font-size: 0.75rem; font-weight: 700;
+  color: var(--gold); letter-spacing: 2px;
+  text-transform: uppercase; margin-bottom: 20px;
+  display: flex; align-items: center; gap: 10px;
+}
+.review-title::after {
+  content: ''; flex: 1; height: 1px; background: var(--border);
+}
+.review-item {
+  background: var(--card);
+  border-radius: 16px; padding: 20px 24px;
+  margin-bottom: 14px;
+  border-right: 4px solid var(--border);
+  animation: slideIn 0.4s ease both;
+}
+.review-item.r-correct { border-right-color: var(--green); }
+.review-item.r-wrong   { border-right-color: var(--red); }
+.review-status {
+  font-size: 0.78rem; font-weight: 800; letter-spacing: 1px;
+  margin-bottom: 8px; display: block;
+}
+.review-item.r-correct .review-status { color: var(--green); }
+.review-item.r-wrong   .review-status { color: var(--red); }
+.review-q { font-weight: 700; margin-bottom: 12px; font-size: 0.95rem; line-height: 1.5; }
+.review-opts { display: flex; flex-wrap: wrap; gap: 8px; }
+.r-opt {
+  padding: 6px 14px; border-radius: 8px;
+  font-size: 0.82rem; font-weight: 600;
+  background: var(--surface); border: 1.5px solid var(--border);
+  color: var(--muted);
+}
+.r-opt.r-correct-ans { background: rgba(61,214,140,0.12); border-color: var(--green); color: var(--green); }
+.r-opt.r-wrong-ans   { background: rgba(255,92,107,0.12); border-color: var(--red);   color: var(--red); }
+
+/* Print receipt style */
+.student-receipt {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px; padding: 20px 24px;
+  margin-bottom: 28px;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.receipt-item { font-size: 0.85rem; }
+.receipt-item label { color: var(--muted); display: block; margin-bottom: 2px; font-size: 0.75rem; }
+.receipt-item span  { font-weight: 700; }
+
+.action-row {
+  display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;
+  margin-top: 32px;
+}
+
+/* Print */
+@media print {
+  body { background: white; color: #111; }
+  .bg-grid, .bg-glow, .bg-glow2, .feedback-toast { display: none; }
+  .wrapper { padding: 0; max-width: 100%; }
+  .btn, .action-row { display: none; }
+  .question-card, .score-hero, .review-item, .student-card, .student-receipt { 
+    break-inside: avoid;
+    border: 1px solid #ddd !important;
+    background: white !important;
+    color: #111 !important;
+  }
+  .option-btn { border: 1px solid #ddd; background: white; color: #111; }
+  .option-btn.correct { background: #e6ffe6 !important; border-color: green !important; }
+  .option-btn.wrong   { background: #ffe6e6 !important; border-color: red !important; }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .student-card, .student-receipt { grid-template-columns: 1fr; }
+  .options-grid { grid-template-columns: 1fr; }
+  .question-card { padding: 20px; }
+  .q-text { font-size: 1rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+<div class="bg-glow2"></div>
+
+<div class="wrapper">
+
+  <!-- ═══ HEADER ═══ -->
+  <div class="exam-header">
+    <div class="academy-badge">🌟 Sunshine T Academy</div>
+    <h1 class="exam-title">اختبار <span class="py">Python</span><br>الشامل</h1>
+    <p class="exam-subtitle">اختبار متكامل على المنهج المدروس حتى الآن</p>
+    <div class="exam-meta">
+      <div class="meta-chip">📋 عدد الأسئلة: <span>10 أسئلة</span></div>
+      <div class="meta-chip">⏱️ الوقت المقترح: <span>10 دقائق</span></div>
+      <div class="meta-chip">⭐ الدرجة الكاملة: <span>100 درجة</span></div>
+    </div>
+  </div>
+
+  <!-- ═══ STUDENT INFO ═══ -->
+  <div class="student-card" id="studentCard">
+    <h3>📝 بيانات الطالب</h3>
+    <div class="field-group">
+      <label>اسم الطالب *</label>
+      <input type="text" id="studentName" placeholder="اكتب اسمك هنا..." />
+    </div>
+    <div class="field-group">
+      <label>التاريخ</label>
+      <input type="text" id="examDate" readonly />
+    </div>
+    <div class="field-group">
+      <label>المجموعة / الفصل</label>
+      <input type="text" id="studentGroup" placeholder="مثال: مجموعة أ" />
+    </div>
+    <div class="field-group">
+      <label>المستوى</label>
+      <select id="studentLevel">
+        <option value="مستوى 1">مستوى 1 — المبتدئين</option>
+        <option value="مستوى 2">مستوى 2 — المتوسطين</option>
+      </select>
+    </div>
+    <div style="grid-column:1/-1; margin-top:8px;">
+      <button class="btn btn-gold" onclick="startExam()" style="width:100%;justify-content:center;font-size:1rem;padding:14px;">
+        🚀 ابدأ الاختبار
+      </button>
+    </div>
+  </div>
+
+  <!-- ═══ QUIZ SECTION ═══ -->
+  <div id="quizSection" style="display:none;">
+
+    <!-- Progress -->
+    <div class="progress-section">
+      <div class="progress-header">
+        <span class="progress-label">تقدم الاختبار</span>
+        <span class="progress-count" id="progressText">0 / 10</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+
+    <!-- Question Card -->
+    <div class="question-card" id="questionCard">
+      <!-- injected by JS -->
+    </div>
+
+    <!-- Nav -->
+    <div class="nav-row">
+      <div class="q-counter" id="qCounter">السؤال 1 من 10</div>
+      <button class="btn btn-gold" id="nextBtn" onclick="nextQuestion()" disabled>
+        التالي ←
+      </button>
+    </div>
+
+  </div>
+
+  <!-- ═══ RESULTS SCREEN ═══ -->
+  <div class="results-screen" id="resultsScreen">
+
+    <!-- Score Hero -->
+    <div class="score-hero" id="scoreHero">
+      <!-- injected -->
+    </div>
+
+    <!-- Student receipt -->
+    <div class="student-receipt" id="receiptBox"></div>
+
+    <!-- Review -->
+    <div class="review-title">📖 مراجعة الإجابات</div>
+    <div id="reviewContainer"></div>
+
+    <!-- Actions -->
+    <div class="action-row">
+      <button class="btn btn-gold" onclick="window.print()">🖨️ طباعة النتيجة</button>
+      <button class="btn btn-outline" onclick="retakeExam()">🔄 إعادة الاختبار</button>
+    </div>
+
+  </div>
+
+</div><!-- /wrapper -->
+
+<!-- Feedback Toast -->
+<div class="feedback-toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════
+// QUESTIONS BANK — 10 أسئلة مخلوطة
+// ═══════════════════════════════════════
+const questions = [
+  // ─── PRINT ──────────────────────────
+  {
+    id: 1,
+    topic: "print",
+    diff: "easy",
+    q: "ما ناتج تشغيل هذا الكود؟",
+    code: 'print("مرحباً يا دنيا!")',
+    options: ["مرحباً يا دنيا!", '"مرحباً يا دنيا!"', 'print', 'خطأ في الكود'],
+    correct: 0
+  },
+  // ─── VARIABLES ──────────────────────
+  {
+    id: 2,
+    topic: "variables",
+    diff: "easy",
+    q: "ما ناتج هذا الكود؟",
+    code: 'name = "أحمد"\nage  = 12\nprint(name)\nprint(age)',
+    options: ["أحمد\n12", "name\nage", "أحمد age", "خطأ في الكود"],
+    correct: 0
+  },
+  // ─── DATA TYPES ─────────────────────
+  {
+    id: 3,
+    topic: "data types",
+    diff: "easy",
+    q: "أي من هذه المتغيرات من نوع float؟",
+    code: null,
+    options: ["x = 3.5", "x = 3", 'x = "3.5"', "x = True"],
+    correct: 0
+  },
+  // ─── ARITHMETIC ─────────────────────
+  {
+    id: 4,
+    topic: "arithmetic",
+    diff: "easy",
+    q: "ما ناتج هذا الكود؟",
+    code: 'print(2 ** 4)',
+    options: ["16", "8", "6", "24"],
+    correct: 0
+  },
+  {
+    id: 5,
+    topic: "arithmetic",
+    diff: "medium",
+    q: "ما الفرق بين / و // في بايثون؟",
+    code: 'print(10 / 3)\nprint(10 // 3)',
+    options: [
+      "الأولى تعطي 3.333... والثانية 3",
+      "الأولى تعطي 3 والثانية 3.333...",
+      "كلاهما يعطيان 3.333...",
+      "الأولى صح والثانية تعطي خطأ"
+    ],
+    correct: 0
+  },
+  {
+    id: 6,
+    topic: "arithmetic",
+    diff: "medium",
+    q: "ما ناتج هذا الكود؟",
+    code: 'x = 17\nprint(x % 5)',
+    options: ["2", "3", "5", "12"],
+    correct: 0
+  },
+  // ─── IF CONDITION ───────────────────
+  {
+    id: 7,
+    topic: "if condition",
+    diff: "easy",
+    q: "ما ناتج هذا الكود؟",
+    code: 'x = 8\nif x > 5:\n    print("كبير")\nelse:\n    print("صغير")',
+    options: ["كبير", "صغير", "8", "لا يوجد ناتج"],
+    correct: 0
+  },
+  {
+    id: 8,
+    topic: "if / elif / else",
+    diff: "medium",
+    q: "طالب حصل على درجة 73. ما الذي سيطبعه هذا الكود؟",
+    code: 'score = 73\nif score >= 90:\n    print("ممتاز")\nelif score >= 75:\n    print("جيد جداً")\nelif score >= 60:\n    print("جيد")\nelse:\n    print("راسب")',
+    options: ["جيد", "جيد جداً", "ممتاز", "راسب"],
+    correct: 0
+  },
+  // ─── MIXED (تطبيقي) ─────────────────
+  {
+    id: 9,
+    topic: "variables + arithmetic",
+    diff: "medium",
+    q: "ما ناتج هذا الكود؟",
+    code: 'a = 10\nb = 3\nprint(a * b)\nprint(a - b)',
+    options: ["30\n7", "13\n7", "30\n13", "7\n30"],
+    correct: 0
+  },
+  {
+    id: 10,
+    topic: "if + arithmetic",
+    diff: "hard",
+    q: "ما ناتج هذا الكود؟",
+    code: 'num = 14\nif num % 2 == 0:\n    print("زوجي")\nelse:\n    print("فردي")',
+    options: ["زوجي", "فردي", "14", "صفر"],
+    correct: 0
+  }
+];
+
+// ═══════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════
+let state = {
+  current: 0,
+  score: 0,
+  answers: [],       // {qIndex, selected, correct, shuffled}
+  answered: false,
+  shuffledQuestions: [],
+  studentName: '',
+  studentGroup: '',
+  studentLevel: '',
+  startTime: null
+};
+
+const TOPIC_AR = {
+  "print":              "الطباعة",
+  "variables":          "المتغيرات",
+  "data types":         "أنواع البيانات",
+  "arithmetic":         "العمليات الحسابية",
+  "if condition":       "جملة if",
+  "if / elif / else":   "if / elif / else",
+  "variables + arithmetic": "متغيرات + حسابيات",
+  "if + arithmetic":    "if + حسابيات"
+};
+
+// ═══════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function shuffleOptions(q) {
+  const withIdx = q.options.map((text, i) => ({ text, origIdx: i }));
+  const shuffled = shuffle(withIdx);
+  const newCorrectDisplay = shuffled.findIndex(o => o.origIdx === q.correct);
+  return { shuffled, newCorrectDisplay };
+}
+
+function setDate() {
+  const d = new Date();
+  const months = ['يناير','فبراير','مارس','أبريل','مايو','يونيو',
+                  'يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+  document.getElementById('examDate').value =
+    `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+}
+
+// ═══════════════════════════════════════
+// START EXAM
+// ═══════════════════════════════════════
+function startExam() {
+  const name = document.getElementById('studentName').value.trim();
+  if (!name) {
+    document.getElementById('studentName').focus();
+    document.getElementById('studentName').style.borderColor = 'var(--red)';
+    setTimeout(() => document.getElementById('studentName').style.borderColor = '', 2000);
+    return;
+  }
+  state.studentName  = name;
+  state.studentGroup = document.getElementById('studentGroup').value || '—';
+  state.studentLevel = document.getElementById('studentLevel').value;
+  state.shuffledQuestions = shuffle([...questions]);
+  state.current = 0;
+  state.score   = 0;
+  state.answers = [];
+  state.startTime = Date.now();
+
+  document.getElementById('studentCard').style.display = 'none';
+  document.getElementById('quizSection').style.display  = 'block';
+  renderQuestion();
+}
+
+// ═══════════════════════════════════════
+// RENDER QUESTION
+// ═══════════════════════════════════════
+function renderQuestion() {
+  const q   = state.shuffledQuestions[state.current];
+  const num = state.current + 1;
+  state.answered = false;
+
+  // Progress
+  document.getElementById('progressText').textContent = `${state.current} / 10`;
+  document.getElementById('progressFill').style.width = `${state.current * 10}%`;
+  document.getElementById('qCounter').textContent = `السؤال ${num} من 10`;
+  document.getElementById('nextBtn').disabled = true;
+
+  // Shuffle options
+  const { shuffled, newCorrectDisplay } = shuffleOptions(q);
+
+  // Store for review
+  state.answers[state.current] = {
+    qIndex: state.current,
+    shuffled,
+    correctDisplay: newCorrectDisplay,
+    selected: -1
+  };
+
+  const labels = ['أ', 'ب', 'ج', 'د'];
+  const diffText = { easy: 'سهل 🟢', medium: 'متوسط 🟡', hard: 'صعب 🔴' };
+  const diffClass= { easy: 'diff-easy', medium: 'diff-medium', hard: 'diff-hard' };
+
+  const codeHTML = q.code
+    ? `<div class="code-inline">${q.code.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>`
+    : '';
+
+  const optsHTML = shuffled.map((opt, di) => `
+    <button class="option-btn" id="opt_${di}" onclick="selectAnswer(${di})">
+      <span class="opt-label">${labels[di]}</span>
+      ${opt.text}
+    </button>
+  `).join('');
+
+  const card = document.getElementById('questionCard');
+  card.style.animation = 'none';
+  card.offsetHeight;
+  card.style.animation = 'slideIn 0.4s cubic-bezier(0.4,0,0.2,1)';
+
+  card.innerHTML = `
+    <div class="q-meta">
+      <span class="q-num">س${num}</span>
+      <span class="q-topic">${TOPIC_AR[q.topic] || q.topic}</span>
+      <span class="q-diff ${diffClass[q.diff]}">${diffText[q.diff]}</span>
+    </div>
+    <div class="q-text">${q.q}</div>
+    ${codeHTML}
+    <div class="options-grid" id="optsGrid">
+      ${optsHTML}
+    </div>
+  `;
+}
+
+// ═══════════════════════════════════════
+// SELECT ANSWER
+// ═══════════════════════════════════════
+function selectAnswer(displayIdx) {
+  if (state.answered) return;
+  state.answered = true;
+
+  const ans = state.answers[state.current];
+  ans.selected = displayIdx;
+  const isCorrect = (displayIdx === ans.correctDisplay);
+  if (isCorrect) state.score += 10;
+
+  // Lock all options
+  document.querySelectorAll('.option-btn').forEach(b => b.classList.add('locked'));
+
+  // Highlight
+  document.getElementById(`opt_${ans.correctDisplay}`).classList.add('correct');
+  if (!isCorrect) {
+    document.getElementById(`opt_${displayIdx}`).classList.add('wrong');
+  }
+
+  // Toast
+  showToast(isCorrect);
+
+  // Enable Next
+  document.getElementById('nextBtn').disabled = false;
+}
+
+// ═══════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════
+function showToast(ok) {
+  const t = document.getElementById('toast');
+  t.className = `feedback-toast ${ok ? 'ok' : 'bad'}`;
+  t.innerHTML  = ok
+    ? '✅ إجابة صحيحة! +10 درجات'
+    : '❌ إجابة خاطئة — تابع المراجعة في النهاية';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+// ═══════════════════════════════════════
+// NEXT QUESTION
+// ═══════════════════════════════════════
+function nextQuestion() {
+  state.current++;
+  if (state.current >= state.shuffledQuestions.length) {
+    showResults();
+  } else {
+    renderQuestion();
+  }
+}
+
+// ═══════════════════════════════════════
+// RESULTS
+// ═══════════════════════════════════════
+function showResults() {
+  document.getElementById('quizSection').style.display = 'none';
+  document.getElementById('resultsScreen').classList.add('show');
+
+  // Progress full
+  document.getElementById('progressFill').style.width = '100%';
+  document.getElementById('progressText').textContent = '10 / 10';
+
+  const pct = state.score;
+  const correct  = state.answers.filter(a => a.selected === a.correctDisplay).length;
+  const wrong    = 10 - correct;
+  const duration = Math.round((Date.now() - state.startTime) / 1000);
+  const mins     = Math.floor(duration/60).toString().padStart(2,'0');
+  const secs     = (duration%60).toString().padStart(2,'0');
+
+  // Grade
+  let emoji, grade, gradeColor;
+  if (pct >= 90) { emoji='🏆'; grade='ممتاز'; gradeColor='var(--green)'; }
+  else if (pct >= 75) { emoji='🌟'; grade='جيد جداً'; gradeColor='var(--blue)'; }
+  else if (pct >= 60) { emoji='👍'; grade='جيد'; gradeColor='var(--gold)'; }
+  else if (pct >= 50) { emoji='⚠️'; grade='مقبول'; gradeColor='var(--gold2)'; }
+  else { emoji='📚'; grade='يحتاج مراجعة'; gradeColor='var(--red)'; }
+
+  const stars = Math.round(pct/20);
+  const starsHTML = '⭐'.repeat(stars) + '☆'.repeat(5-stars);
+
+  document.getElementById('scoreHero').innerHTML = `
+    <div class="score-emoji">${emoji}</div>
+    <div class="score-num">${pct}<span style="font-size:1.5rem;color:var(--muted)">/100</span></div>
+    <div class="score-label">درجتك النهائية</div>
+    <div class="grade-badge" style="background:rgba(255,255,255,0.05);border:2px solid ${gradeColor};color:${gradeColor}">${grade}</div>
+    <div class="stars-row">${starsHTML}</div>
+    <div class="score-detail">
+      <div>✅ صح: <span class="ok">${correct}</span></div>
+      <div>❌ خطأ: <span class="bad">${wrong}</span></div>
+      <div>⏱️ الوقت: <span>${mins}:${secs}</span></div>
+    </div>
+  `;
+
+  // Receipt
+  document.getElementById('receiptBox').innerHTML = `
+    <div class="receipt-item"><label>اسم الطالب</label><span>${state.studentName}</span></div>
+    <div class="receipt-item"><label>التاريخ</label><span>${document.getElementById('examDate').value}</span></div>
+    <div class="receipt-item"><label>المجموعة</label><span>${state.studentGroup}</span></div>
+    <div class="receipt-item"><label>المستوى</label><span>${state.studentLevel}</span></div>
+  `;
+
+  // Review
+  const labels = ['أ','ب','ج','د'];
+  let reviewHTML = '';
+  state.answers.forEach((ans, i) => {
+    const q = state.shuffledQuestions[ans.qIndex];
+    const isCorrect = ans.selected === ans.correctDisplay;
+    const optsHTML = ans.shuffled.map((opt, di) => {
+      let cls = 'r-opt';
+      if (di === ans.correctDisplay) cls += ' r-correct-ans';
+      else if (di === ans.selected && !isCorrect) cls += ' r-wrong-ans';
+      return `<div class="${cls}">${labels[di]}. ${opt.text}</div>`;
+    }).join('');
+
+    reviewHTML += `
+      <div class="review-item ${isCorrect?'r-correct':'r-wrong'}" style="animation-delay:${i*0.07}s">
+        <span class="review-status">${isCorrect ? '✅ إجابة صحيحة' : '❌ إجابة خاطئة'}</span>
+        <div class="review-q">س${i+1}: ${q.q}${q.code ? `<br><code style="font-family:var(--mono);font-size:0.8rem;color:var(--gold);direction:ltr;display:inline-block">${q.code.replace(/\n/g,' | ')}</code>` : ''}</div>
+        <div class="review-opts">${optsHTML}</div>
+      </div>
+    `;
+  });
+  document.getElementById('reviewContainer').innerHTML = reviewHTML;
+}
+
+// ═══════════════════════════════════════
+// RETAKE
+// ═══════════════════════════════════════
+function retakeExam() {
+  document.getElementById('resultsScreen').classList.remove('show');
+  document.getElementById('studentCard').style.display = 'grid';
+  state = { ...state, current:0, score:0, answers:[], answered:false, shuffledQuestions:[] };
+}
+
+// ═══════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════
+setDate();
+</script>
+</body>
+</html>
